@@ -1,0 +1,54 @@
+name: Update Cask
+
+# Triggered by a repository_dispatch event from any app repo.
+# Expected payload:
+#   cask    — cask name matching a file under Casks/ (e.g. "hyperzen", "json-young")
+#   version — new version string without the "v" prefix (e.g. "1.2.0")
+#   sha256  — SHA256 checksum of the release DMG
+
+on:
+  repository_dispatch:
+    types: [update-cask]
+
+permissions:
+  contents: write
+
+jobs:
+  update-cask:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Patch cask formula
+        env:
+          CASK: ${{ github.event.client_payload.cask }}
+          VERSION: ${{ github.event.client_payload.version }}
+          SHA256: ${{ github.event.client_payload.sha256 }}
+        run: |
+          CASK_FILE="Casks/$CASK.rb"
+
+          if [[ ! -f "$CASK_FILE" ]]; then
+            echo "Cask file not found: $CASK_FILE" >&2
+            exit 1
+          fi
+
+          sed -i "s/version \".*\"/version \"$VERSION\"/" "$CASK_FILE"
+          sed -i "s/sha256 \".*\"/sha256 \"$SHA256\"/" "$CASK_FILE"
+
+          echo "Updated $CASK_FILE to version $VERSION"
+          cat "$CASK_FILE"
+
+      - name: Commit and push
+        env:
+          CASK: ${{ github.event.client_payload.cask }}
+          VERSION: ${{ github.event.client_payload.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "Casks/$CASK.rb"
+          git commit -m "chore: bump $CASK to v$VERSION"
+          git push
