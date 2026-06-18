@@ -1,6 +1,6 @@
 cask "hyperzen" do
-  version "0.0.3"
-  sha256 "30b4dd971f72db078f526024c09149c975307b6823cb55e6695dde876c374655"
+  version "0.0.4"
+  sha256 "4e16919f6be80abb4faa8b8e4c7726564c57ace35cab27eb289de243cb9e5d1a"
 
   url "https://github.com/panutat-p/hyper-zen/releases/download/v#{version}/HyperZen.dmg"
   name "HyperZen"
