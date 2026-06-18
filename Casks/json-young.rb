@@ -7,7 +7,7 @@ cask "json-young" do
   desc "macOS desktop app for validating and pretty-printing JSON"
   homepage "https://github.com/panutat-p/json-young"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "JSON Young.app"
 

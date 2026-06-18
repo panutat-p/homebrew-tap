@@ -7,7 +7,7 @@ cask "hyperzen" do
   desc "Lightweight macOS menu bar app that keeps your Mac awake"
   homepage "https://github.com/panutat-p/hyper-zen"
 
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "HyperZen.app"
 
