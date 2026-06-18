@@ -1,6 +1,6 @@
 cask "json-young" do
-  version "1.0.0"
-  sha256 "PLACEHOLDER_SHA256"
+  version "0.0.2"
+  sha256 "0b19beeb05a607bd457d093c89c148dfef90a80b7baf5f2cefde6f75089766a6"
 
   url "https://github.com/panutat-p/json-young/releases/download/v#{version}/JSON_Young.dmg"
   name "JSON Young"
