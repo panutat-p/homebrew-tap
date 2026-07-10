@@ -1,0 +1,66 @@
+name: Update Formula
+
+on:
+  repository_dispatch:
+    types: [update-formula]
+
+permissions:
+  contents: write
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate release metadata
+        env:
+          FORMULA: ${{ github.event.client_payload.formula }}
+          VERSION: ${{ github.event.client_payload.version }}
+          SHA256: ${{ github.event.client_payload.sha256 }}
+        run: |
+          if [[ "$FORMULA" != "hyper-zen" ]]; then
+            echo "Unsupported formula: $FORMULA" >&2
+            exit 1
+          fi
+
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Version must be a semantic version: $VERSION" >&2
+            exit 1
+          fi
+
+          if [[ ! "$SHA256" =~ ^[[:xdigit:]]{64}$ ]]; then
+            echo "SHA256 must be a 64-character hexadecimal value" >&2
+            exit 1
+          fi
+
+      - name: Render formula
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+          SHA256: ${{ github.event.client_payload.sha256 }}
+        run: |
+          mkdir -p Formula
+          sed \
+            -e "s/__VERSION__/$VERSION/g" \
+            -e "s/__SHA256__/$SHA256/g" \
+            .github/formula-templates/hyper-zen.rb > Formula/hyper-zen.rb
+          ruby -c Formula/hyper-zen.rb
+
+      - name: Commit and push
+        env:
+          VERSION: ${{ github.event.client_payload.version }}
+        run: |
+          git add Formula/hyper-zen.rb
+          if git diff --cached --quiet; then
+            echo "Formula is already current"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: bump hyper-zen to v$VERSION"
+          git push
