@@ -12,7 +12,7 @@ class HyperZen < Formula
   end
 
   service do
-    run [opt_bin/"hyper-zen-#{version}", "status-icon"]
+    run [opt_bin/"hyper-zen-#{f.version}", "status-icon"]
   end
 
   def caveats
