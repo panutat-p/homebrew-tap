@@ -1,9 +1,9 @@
 class HyperZen < Formula
   desc "Native macOS automation toolkit"
   homepage "https://github.com/panutat-p/hyper-zen"
-  version "0.1.3"
+  version "0.1.4"
   url "https://github.com/panutat-p/hyper-zen/releases/download/v#{version}/hyper-zen-#{version}.tar.gz"
-  sha256 "c5a7db6eada5f8b6e8a6ffcf9d601156b4e0fc26ff65641758c1ff83f4d8dd0a"
+  sha256 "eeac4b63e8332c46584098d05e33bf13019766d21566b3742fb6c3ad91802870"
 
   depends_on macos: :ventura
 
