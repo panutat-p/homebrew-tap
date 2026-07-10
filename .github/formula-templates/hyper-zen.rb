@@ -8,16 +8,16 @@ class HyperZen < Formula
   depends_on macos: :ventura
 
   def install
-    versioned_name = "hyper-zen-v#{version.tr(".", "_")}"
+    versioned_name = "hyper-zen-v#{version.tr(".", "-")}"
     bin.install "hyper-zen" => versioned_name
   end
 
   service do
-    run [opt_bin/"hyper-zen-v#{f.version.to_s.tr(".", "_")}", "status-icon"]
+    run [opt_bin/"hyper-zen-v#{f.version.to_s.tr(".", "-")}", "status-icon"]
   end
 
   def caveats
-    versioned_name = "hyper-zen-v#{version.tr(".", "_")}"
+    versioned_name = "hyper-zen-v#{version.tr(".", "-")}"
     <<~EOS
       Hyper Zen requires Accessibility permission for Teams presence.
 
@@ -33,7 +33,7 @@ class HyperZen < Formula
   end
 
   test do
-    versioned_name = "hyper-zen-v#{version.tr(".", "_")}"
+    versioned_name = "hyper-zen-v#{version.tr(".", "-")}"
     assert_match version.to_s, shell_output("#{bin}/#{versioned_name} version")
   end
 end
