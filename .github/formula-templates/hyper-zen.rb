@@ -8,14 +8,16 @@ class HyperZen < Formula
   depends_on macos: :ventura
 
   def install
-    bin.install "hyper-zen" => "hyper-zen-#{version}"
+    versioned_name = "hyper-zen-v#{version.tr(".", "_")}"
+    bin.install "hyper-zen" => versioned_name
   end
 
   service do
-    run [opt_bin/"hyper-zen-#{f.version}", "status-icon"]
+    run [opt_bin/"hyper-zen-v#{f.version.to_s.tr(".", "_")}", "status-icon"]
   end
 
   def caveats
+    versioned_name = "hyper-zen-v#{version.tr(".", "_")}"
     <<~EOS
       Hyper Zen requires Accessibility permission for Teams presence.
 
@@ -23,7 +25,7 @@ class HyperZen < Formula
       System Settings > Privacy & Security > Accessibility
 
       Add:
-        #{bin}/hyper-zen-#{version}
+        #{bin}/#{versioned_name}
 
       Remove the previous Hyper Zen entry, then restart the service:
         brew services restart hyper-zen
@@ -31,6 +33,7 @@ class HyperZen < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/hyper-zen-#{version} version")
+    versioned_name = "hyper-zen-v#{version.tr(".", "_")}"
+    assert_match version.to_s, shell_output("#{bin}/#{versioned_name} version")
   end
 end
