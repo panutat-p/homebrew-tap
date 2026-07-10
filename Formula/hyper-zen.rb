@@ -8,7 +8,7 @@ class HyperZen < Formula
   depends_on macos: :ventura
 
   def install
-    versioned_name = "hyper-zen-v#{version.tr(".", "-")}"
+    versioned_name = "hyper-zen-v#{version.to_s.tr(".", "-")}"
     bin.install "hyper-zen" => versioned_name
   end
 
@@ -17,7 +17,7 @@ class HyperZen < Formula
   end
 
   def caveats
-    versioned_name = "hyper-zen-v#{version.tr(".", "-")}"
+    versioned_name = "hyper-zen-v#{version.to_s.tr(".", "-")}"
     <<~EOS
       Hyper Zen requires Accessibility permission for Teams presence.
 
@@ -33,7 +33,7 @@ class HyperZen < Formula
   end
 
   test do
-    versioned_name = "hyper-zen-v#{version.tr(".", "-")}"
+    versioned_name = "hyper-zen-v#{version.to_s.tr(".", "-")}"
     assert_match version.to_s, shell_output("#{bin}/#{versioned_name} version")
   end
 end
