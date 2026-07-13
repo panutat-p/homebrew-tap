@@ -1,14 +1,14 @@
-name: Update Formula
+name: Update Cask
 
 on:
   repository_dispatch:
-    types: [update-formula]
+    types: [update-cask]
 
 permissions:
   contents: write
 
 jobs:
-  update-formula:
+  update-cask:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,12 +19,12 @@ jobs:
 
       - name: Validate release metadata
         env:
-          FORMULA: ${{ github.event.client_payload.formula }}
+          CASK: ${{ github.event.client_payload.cask }}
           VERSION: ${{ github.event.client_payload.version }}
           SHA256: ${{ github.event.client_payload.sha256 }}
         run: |
-          if [[ "$FORMULA" != "hyper-zen" ]]; then
-            echo "Unsupported formula: $FORMULA" >&2
+          if [[ "$CASK" != "hyperzen" ]]; then
+            echo "Unsupported cask: $CASK" >&2
             exit 1
           fi
 
@@ -38,29 +38,29 @@ jobs:
             exit 1
           fi
 
-      - name: Render formula
+      - name: Render cask
         env:
           VERSION: ${{ github.event.client_payload.version }}
           SHA256: ${{ github.event.client_payload.sha256 }}
         run: |
-          mkdir -p Formula
+          mkdir -p Casks
           sed \
             -e "s/__VERSION__/$VERSION/g" \
             -e "s/__SHA256__/$SHA256/g" \
-            .github/formula-templates/hyper-zen.rb > Formula/hyper-zen.rb
-          ruby -c Formula/hyper-zen.rb
+            .github/cask-templates/hyperzen.rb > Casks/hyperzen.rb
+          ruby -c Casks/hyperzen.rb
 
       - name: Commit and push
         env:
           VERSION: ${{ github.event.client_payload.version }}
         run: |
-          git add Formula/hyper-zen.rb
+          git add Casks/hyperzen.rb
           if git diff --cached --quiet; then
-            echo "Formula is already current"
+            echo "Cask is already current"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: bump hyper-zen to v$VERSION"
+          git commit -m "chore: bump hyperzen to v$VERSION"
           git push
