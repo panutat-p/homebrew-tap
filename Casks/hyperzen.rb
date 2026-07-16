@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 cask "hyperzen" do
-  version "1.0.1"
-  sha256 "3fedbbf633444ef3a768743928e0c6e4b338258216081c3c0b015355e66c396e"
+  version "1.0.2"
+  sha256 "34a6cbb2a3c11759ba59d26993e3d93af2eb7735039ac60de6bd48ee181ca7dc"
 
   url "https://github.com/panutat-p/hyper-zen/releases/download/v#{version}/HyperZen.dmg"
   name "HyperZen"
